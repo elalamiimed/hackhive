@@ -11,8 +11,12 @@ html{font-size:16px;scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
 body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
 .page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 24px}
-.topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--dim);letter-spacing:.02em}
+.topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--dim);letter-spacing:.02em}
 .topbar a{color:var(--dim);text-decoration:none}.topbar a:hover{color:var(--white)}
+.topbar .brand{color:#c8c8c8}
+.topbar .nav{display:flex;gap:22px;align-items:baseline}
+.topbar a.cta{color:#dedede}
+.topbar a.cta:hover{color:#fff}
 .hero{padding:120px 0 80px}
 .hero h1{font-size:clamp(2.4rem,6vw,3.6rem);font-weight:400;letter-spacing:-.03em;line-height:1.15;color:#e8e8e8}
 .hero h1 em{font-style:normal;color:var(--dim)}
@@ -75,7 +79,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
 </head>
 <body>
 <div class="page">
-  <div class="topbar"><a href="/" style="color:var(--dim);text-decoration:none">hack hive · 01</a><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS ↗</a></div>
+  <div class="topbar"><a class="brand" href="/">HITSZCS</a><span class="nav"><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">GitHub ↗</a><a class="cta" href="/hackhive/">Hack Hive Hackathon 01</a></span></div>
   <div class="hero fade">
     <h1>Study Buddy.<br/><em>a 71-hour hackathon.</em></h1>
     <p>We want a simple, friendly platform where HITSZ students can find someone to study with, ask a senior for help before an exam, or just share notes without the hassle. CS students come first. That's it. Build it your way.</p>

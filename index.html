@@ -13,9 +13,10 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 24px}
 .topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--dim);letter-spacing:.02em}
 .topbar a{color:var(--dim);text-decoration:none}.topbar a:hover{color:var(--white)}
-.topbar .nav{display:flex;gap:18px;align-items:baseline}
-.topbar a.cta{color:#d4d4d4;border:1px solid #3a3a3a;padding:6px 14px;font-size:12px;letter-spacing:.06em;transition:border-color .2s,color .2s,background .2s;background:#0a0a0a}
-.topbar a.cta:hover{color:#fff;border-color:#999;background:#111}
+.topbar .brand{color:#c8c8c8}
+.topbar .nav{display:flex;gap:22px;align-items:baseline}
+.topbar a.cta{color:#dedede}
+.topbar a.cta:hover{color:#fff}
 .hero{padding:120px 0 72px}
 .hero h1{font-size:clamp(2.6rem,7vw,4rem);font-weight:400;letter-spacing:-.03em;line-height:1.12;color:#e8e8e8}
 .hero h1 em{font-style:normal;color:var(--dim);display:block;margin-top:18px;font-size:clamp(1.1rem,2.6vw,1.4rem);letter-spacing:.01em}
@@ -44,14 +45,12 @@ ul.rules li strong{color:#c0c0c0;font-weight:400}
 .door:hover .d-arrow{color:#888}
 footer{padding:40px 0 60px;border-top:1px solid #111;font-size:12px;color:var(--faint)}
 footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)}
-.whisper{margin-top:24px;font-size:11px;line-height:1.6}
-.whisper a{color:#1e1e1e;text-decoration:none;transition:color .3s}.whisper a:hover{color:#666}
 .fade{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}.fade.in{opacity:1;transform:none}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="topbar"><span>HITSZCS</span><span class="nav"><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">GitHub ↗</a><a class="cta" href="hackhive/">Hack Hive Hackathon 01</a></span></div>
+  <div class="topbar"><a class="brand" href="/">HITSZCS</a><span class="nav"><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">GitHub ↗</a><a class="cta" href="/hackhive/">Hack Hive Hackathon 01</a></span></div>
 
   <div class="hero fade">
     <h1>HITSZCS.<em>by CS students, to CS students.</em></h1>
@@ -107,7 +106,6 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
 
   <footer>
     <a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS</a> · Harbin Institute of Technology, Shenzhen · <span id="yr"></span>
-    <p class="whisper"><a href="maze/">you read too closely. good. the maze is waiting.</a></p>
   </footer>
 </div>
 
