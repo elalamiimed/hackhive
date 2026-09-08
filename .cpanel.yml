@@ -4,7 +4,9 @@ deployment:
     - export DEPLOYPATH=/home/hitsfmec/public_html/
     - /bin/cp index.html $DEPLOYPATH
     - /bin/rm -f $DEPLOYPATH/hackathon-01.html
+    - /bin/rm -f $DEPLOYPATH/maze.html
     - /bin/mkdir -p $DEPLOYPATH/hackhive
     - /bin/cp hackhive/index.html $DEPLOYPATH/hackhive/index.html
-    - /bin/cp maze.html $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/maze
+    - /bin/cp maze/index.html $DEPLOYPATH/maze/index.html
     - /bin/cp pot.php $DEPLOYPATH
