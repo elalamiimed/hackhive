@@ -6,432 +6,111 @@
 <title>the maze — study buddy</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
-:root{
-  --black:#000;
-  --dot:#141414;
-  --white:#d4d4d4;
-  --dim:#555;
-  --faint:#333;
-}
-
+:root{--black:#000;--dot:#141414;--white:#d4d4d4;--dim:#555;--faint:#333}
 html{font-size:16px;scroll-behavior:smooth}
-
-body{
-  background:var(--black);
-  color:var(--white);
-  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-  line-height:1.7;
-  -webkit-font-smoothing:antialiased;
-}
-
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);
-  background-size:28px 28px;
-  pointer-events:none;
-  z-index:0;
-}
-
-.page{
-  position:relative;
-  z-index:1;
-  max-width:640px;
-  margin:0 auto;
-  padding:0 24px 100px;
-}
-
-.topbar{
-  padding:40px 0 0;
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  font-size:13px;
-  color:var(--dim);
-  letter-spacing:.02em;
-}
+body{background:var(--black);color:var(--white);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+.page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 24px 100px}
+.topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--dim);letter-spacing:.02em}
 .topbar .progress{font-size:11px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase}
-
 .room{padding-top:90px}
-.room-title{
-  font-size:clamp(1.6rem,4vw,2.2rem);
-  font-weight:400;
-  letter-spacing:-.02em;
-  color:#e0e0e0;
-  margin-bottom:20px;
-}
-.room p{
-  font-size:14px;
-  color:var(--dim);
-  line-height:1.85;
-  margin-bottom:14px;
-  max-width:520px;
-}
-
-.room pre{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  font-size:12.5px;
-  line-height:1.7;
-  color:#999;
-  border-left:1px solid #222;
-  padding-left:16px;
-  margin:18px 0;
-  white-space:pre;
-  overflow-x:auto;
-}
-
+.room-title{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:400;letter-spacing:-.02em;color:#e0e0e0;margin-bottom:20px}
+.room p{font-size:14px;color:var(--dim);line-height:1.85;margin-bottom:14px;max-width:520px}
+.room pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7;color:#999;border-left:1px solid #222;padding-left:16px;margin:18px 0;white-space:pre;overflow-x:auto}
 .lines{margin:16px 0}
-.lines span{
-  display:block;
-  padding:9px 0;
-  border-bottom:1px solid #111;
-  font-size:13.5px;
-  color:#888;
-  line-height:1.7;
-}
+.lines span{display:block;padding:9px 0;border-bottom:1px solid #111;font-size:13.5px;color:#888;line-height:1.7}
 .lines span:last-child{border-bottom:none}
-.lines a{color:#999;text-decoration:none;border-bottom:1px solid #333}
-.lines a:hover{color:#ccc}
-
+.lines a{color:#999;text-decoration:none;border-bottom:1px solid #333}.lines a:hover{color:#ccc}
 .doors{margin-top:36px}
-.door{
-  display:block;
-  width:100%;
-  text-align:left;
-  background:transparent;
-  border:1px solid #1a1a1a;
-  padding:12px 16px;
-  margin-top:10px;
-  color:#777;
-  font:inherit;
-  font-size:14px;
-  cursor:pointer;
-  transition:border-color .2s,color .2s,padding-left .2s;
-}
+.door{display:block;width:100%;text-align:left;background:transparent;border:1px solid #1a1a1a;padding:12px 16px;margin-top:10px;color:#777;font:inherit;font-size:14px;cursor:pointer;transition:border-color .2s,color .2s,padding-left .2s}
 .door::before{content:'→  ';color:#333}
 .door:hover{border-color:#333;color:#ccc;padding-left:22px}
-.door.new{border-color:#2a2a2a;color:#999}
-.door.new::before{content:'→  ';color:#555}
-
-.found{
-  margin-top:28px;
-  padding-top:16px;
-  border-top:1px solid #111;
-  font-size:12px;
-  color:var(--faint);
-  letter-spacing:.06em;
-  line-height:1.8;
-}
-
-/* the slot */
+.door.new{border-color:#2a2a2a;color:#999}.door.new::before{content:'→  ';color:#555}
+.found{margin-top:28px;padding-top:16px;border-top:1px solid #111;font-size:12px;color:var(--faint);letter-spacing:.06em;line-height:1.8}
 .slot{margin:28px 0}
-.slot-link{
-  display:inline-block;
-  padding:12px 32px;
-  border:1px solid #333;
-  color:#ccc;
-  text-decoration:none;
-  font-size:14px;
-  letter-spacing:.03em;
-  transition:border-color .2s,color .2s;
-}
+.slot-link{display:inline-block;padding:12px 32px;border:1px solid #333;color:#ccc;text-decoration:none;font-size:14px;letter-spacing:.03em;transition:border-color .2s,color .2s}
 .slot-link:hover{border-color:#666;color:#fff}
 .slot-note{margin-top:12px;font-size:12px;color:var(--faint)}
-
-.overlay{
-  position:fixed;inset:0;background:#000;z-index:999;
-  display:none;align-items:center;justify-content:center;
-  text-align:center;color:#555;font-size:14px;line-height:2.2;
-}
-.overlay.on{display:flex}
-
-.fadein{animation:fin .5s ease}
-@keyframes fin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.overlay{position:fixed;inset:0;background:#000;z-index:999;display:none;align-items:center;justify-content:center;text-align:center;color:#555;font-size:14px;line-height:2.2}.overlay.on{display:flex}
+.fadein{animation:fin .5s ease}@keyframes fin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="topbar">
-    <span>the maze</span>
-    <span class="progress" id="progress">rooms found 0/5</span>
-  </div>
+  <div class="topbar"><span>the maze</span><span class="progress" id="progress">rooms found 0/5</span></div>
   <div class="room" id="room"></div>
 </div>
-
 <div class="overlay" id="overlay">the walls are watching.<br/>close devtools to keep walking.</div>
 
 <script>
-// the surface. change this if the index ever moves.
-var SURFACE = 'https://hackhiveatelalamiimed.netlify.app/';
-
-// the submission form, kept out of plain sight. determined people will still find it — that's fine.
-var SLOT_URL = 'https://f.wps.cn/g/8dZzRxhR/' +
-  decodeURIComponent('%E9%82%80%E4%BD%A0%E5%A1%AB%E5%86%99%E3%80%8CHack%20Hive%E3%80%8D');
-
+var SURFACE = '/';
+var SLOT_URL = 'https://f.wps.cn/g/8dZzRxhR/' + decodeURIComponent('%E9%82%80%E4%BD%A0%E5%A1%AB%E5%86%99%E3%80%8CHack%20Hive%E3%80%8D');
 var SEEN_KEY = 'sb_maze_seen';
 
 var ROOMS = {
-
-gate:{
-  title:'the gate',
-  body:'<p>the door closes behind you. it was never a door — just a sentence on a black page, and you followed it. respect.</p><p>five rooms in here hold something useful. some doors lie. dead ends are not punishment; they are just walls.</p><p>see every room, and something new opens. that is the only way out with your work in hand.</p>',
-  doors:[
-    {label:'the narrow door, slightly open', to:'architecture'},
-    {label:'the wide door, perfectly straight', to:'deadwide'},
-    {label:'stairs going down', to:'junction'}
-  ]
-},
-
-architecture:{
-  content:true,
-  title:'room i — the skeleton',
-  body:'<p>every project that scores well looks roughly the same from orbit: separate what shows from what thinks, and write down why.</p>'+
-'<pre>your-project/\n'+
-'├── README.md            ← judges read this first. make it sing.\n'+
-'├── docs/\n'+
-'│   ├── architecture.md  ← components, data flow, the why\n'+
-'│   └── decisions.md     ← what you chose, what you rejected\n'+
-'├── src/\n'+
-'│   ├── ui/              ← pages, components, styles\n'+
-'│   ├── core/            ← logic: matching, auth, courses\n'+
-'│   ├── data/            ← models, storage, seeds\n'+
-'│   └── main             ← one entry point. one.\n'+
-'├── tests/               ← three tests beat zero tests\n'+
-'└── assets/</pre>'+
-'<p>name folders for what they hold, not what they do on Tuesdays. if a file needs a comment to explain its name, rename the file instead.</p>',
-  doors:[
-    {label:'continue deeper', to:'junction'},
-    {label:'back to the gate', to:'gate'}
-  ]
-},
-
-junction:{
-  title:'the junction',
-  body:'<p>three ways onward. from somewhere to the left you hear typing. to the right, nothing at all. ahead, a curtain that has seen things.</p>',
-  doors:[
-    {label:'left, toward the typing', to:'prompts'},
-    {label:'right, into the silence', to:'deadsilent'},
-    {label:'through the curtain', to:'resources'}
-  ]
-},
-
-prompts:{
-  content:true,
-  title:'room ii — the typing room',
-  body:'<p>vibecoding is legal here. the only law: you must understand every line it writes, because judges will ask. these openings work:</p>'+
-'<div class="lines">'+
-'<span>"here is my folder tree and my README draft. tell me where the architecture explanation is weak."</span>'+
-'<span>"review this component for clarity, naming and accessibility. be blunt."</span>'+
-'<span>"write unit tests for this function, including the edge cases i forgot."</span>'+
-'<span>"explain this error in one paragraph, then the fix, then why the fix works."</span>'+
-'<span>"draft docs/architecture.md from this codebase. only features that actually exist."</span>'+
-'<span>"refactor this file for readability only. no behaviour changes. show the diff."</span>'+
-'</div>'+
-'<p>prompt like a colleague, not a vending machine. context in, judgment out.</p>',
-  doors:[
-    {label:'deeper, past the keyboards', to:'seniors'},
-    {label:'back to the junction', to:'junction'}
-  ]
-},
-
-resources:{
-  content:true,
-  title:'room iii — the shelf',
-  body:'<p>things worth knowing before you burn hours rediscovering them:</p>'+
-'<div class="lines">'+
-'<span><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS</a> — notes, past papers, cross-major material. already organised. stop asking in group chats.</span>'+
-'<span>git from hour one. commit messages are sentences, not "fix2 final REAL".</span>'+
-'<span>README skeleton at hour 1, not hour 46. it writes your plan for you.</span>'+
-'<span>steal structure, not code: read two good repos before you write line one.</span>'+
-'<span>desktop only, remember. test at 1920×1080 and 1366×768 before you sleep.</span>'+
-'</div>',
-  doors:[
-    {label:'deeper, behind the shelf', to:'checklist'},
-    {label:'back to the junction', to:'junction'}
-  ]
-},
-
-seniors:{
-  content:true,
-  title:'room iv — the senior\'s room',
-  body:'<p>scratched into the wall here, in no particular order, by people who survived previous hackathons:</p>'+
-'<div class="lines">'+
-'<span>freeze features at hour 36. hour-40 rewrite energy has killed more projects than bad code ever did.</span>'+
-'<span>argue about architecture once, at the start, 30 minutes max. then build.</span>'+
-'<span>record the video at hour 40. re-record only if something breaks after.</span>'+
-'<span>a README written at the end reads like an apology. write it while you still believe in the project.</span>'+
-'<span>the team that sleeps six hours ships better code than the team that sleeps three. tested. repeatedly.</span>'+
-'</div>',
-  doors:[
-    {label:'deeper, to the last lit room', to:'checklist'},
-    {label:'back to the typing room', to:'prompts'}
-  ]
-},
-
-checklist:{
-  content:true,
-  title:'room v — the last lit room',
-  body:'<p>before you push, both of you, out loud, check:</p>'+
-'<div class="lines">'+
-'<span>repo link opens in incognito, on the other person\'s machine.</span>'+
-'<span>README has: what, why, setup steps, architecture, screenshots, video link.</span>'+
-'<span>video exists, is short, and shows the thing actually running.</span>'+
-'<span>every button does something — or is removed. dead buttons are dead points.</span>'+
-'<span>both teammates can explain every folder without opening it.</span>'+
-'<span>pushed before sat 23:00. not 23:01. the clock is the clock.</span>'+
-'</div>',
-  doors:[
-    {label:'the last door', to:'exit'},
-    {label:'back to the junction', to:'junction'}
-  ]
-},
-
-deadwide:{
-  title:'a wall, painted',
-  body:'<p>the wide door was paint. your hand met flat wall. whoever built this place has a sense of humor, and it is not kind.</p>',
-  doors:[
-    {label:'return to the gate', to:'gate'}
-  ]
-},
-
-deadsilent:{
-  title:'the mirror room',
-  body:'<p>the silent corridor ends in a mirror. it looks tired. you both agree to turn back without mentioning it.</p>',
-  doors:[
-    {label:'back to the junction', to:'junction'}
-  ]
-},
-
-exit:{
-  title:'the way out',
-  body:'<p>that\'s the maze. everything useful it had, it gave you.</p><p>now close this tab, open your editor, and build something a sophomore will thank you for in June.</p>',
-  doors:[
-    {label:'back to the surface', to:'INDEX'}
-  ]
-},
-
-slot:{
-  title:'the slot',
-  body:'<p>you walked every room, opened every door that mattered, and pressed your palm against at least one painted wall. the maze has nothing left to give you — except this:</p>'+
-'<div class="slot">'+
-'<a class="slot-link" id="slotLink" href="#" target="_blank" rel="noopener">submit your work ↗</a>'+
-'<p class="slot-note">the form lives outside the maze. repo link, video, README — everything the house rules asked for. one submission per team.</p>'+
-'</div>',
-  doors:[
-    {label:'back into the maze', to:'gate'},
-    {label:'back to the surface', to:'INDEX'}
-  ]
-}
-
+gate:{ title:'the gate', body:'<p>the door closes behind you. it was never a door — just a sentence on a black page, and you followed it. respect.</p><p>five rooms in here hold something useful. some doors lie. dead ends are not punishment; they are just walls.</p><p>see every room, and something new opens. that is the only way out with your work in hand.</p>', doors:[ {label:'the narrow door, slightly open', to:'architecture'}, {label:'the wide door, perfectly straight', to:'deadwide'}, {label:'stairs going down', to:'junction'} ] },
+architecture:{ content:true, title:'room i — the skeleton', body:'<p>every project that scores well looks roughly the same from orbit: separate what shows from what thinks, and write down why.</p><pre>your-project/\n├── README.md            ← judges read this first. make it sing.\n├── docs/\n│   ├── architecture.md  ← components, data flow, the why\n│   └── decisions.md     ← what you chose, what you rejected\n├── src/\n│   ├── ui/              ← pages, components, styles\n│   ├── core/            ← logic: matching, auth, courses\n│   ├── data/            ← models, storage, seeds\n│   └── main             ← one entry point. one.\n├── tests/               ← three tests beat zero tests\n└── assets/</pre><p>name folders for what they hold, not what they do on Tuesdays. if a file needs a comment to explain its name, rename the file instead.</p>', doors:[ {label:'continue deeper', to:'junction'}, {label:'back to the gate', to:'gate'} ] },
+junction:{ title:'the junction', body:'<p>three ways onward. from somewhere to the left you hear typing. to the right, nothing at all. ahead, a curtain that has seen things.</p>', doors:[ {label:'left, toward the typing', to:'prompts'}, {label:'right, into the silence', to:'deadsilent'}, {label:'through the curtain', to:'resources'} ] },
+prompts:{ content:true, title:'room ii — the typing room', body:'<p>vibecoding is legal here. the only law: you must understand every line it writes, because judges will ask. these openings work:</p><div class="lines"><span>"here is my folder tree and my README draft. tell me where the architecture explanation is weak."</span><span>"review this component for clarity, naming and accessibility. be blunt."</span><span>"write unit tests for this function, including the edge cases i forgot."</span><span>"explain this error in one paragraph, then the fix, then why the fix works."</span><span>"draft docs/architecture.md from this codebase. only features that actually exist."</span><span>"refactor this file for readability only. no behaviour changes. show the diff."</span></div><p>prompt like a colleague, not a vending machine. context in, judgment out.</p>', doors:[ {label:'deeper, past the keyboards', to:'seniors'}, {label:'back to the junction', to:'junction'} ] },
+resources:{ content:true, title:'room iii — the shelf', body:'<p>things worth knowing before you burn hours rediscovering them:</p><div class="lines"><span><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS</a> — notes, past papers, cross-major material. already organised. stop asking in group chats.</span><span>git from hour one. commit messages are sentences, not "fix2 final REAL".</span><span>README skeleton at hour 1, not hour 46. it writes your plan for you.</span><span>steal structure, not code: read two good repos before you write line one.</span><span>desktop only, remember. test at 1920×1080 and 1366×768 before you sleep.</span></div>', doors:[ {label:'deeper, behind the shelf', to:'checklist'}, {label:'back to the junction', to:'junction'} ] },
+seniors:{ content:true, title:'room iv — the senior\'s room', body:'<p>scratched into the wall here, in no particular order, by people who survived previous hackathons:</p><div class="lines"><span>freeze features at hour 36. hour-40 rewrite energy has killed more projects than bad code ever did.</span><span>argue about architecture once, at the start, 30 minutes max. then build.</span><span>record the video at hour 40. re-record only if something breaks after.</span><span>a README written at the end reads like an apology. write it while you still believe in the project.</span><span>the team that sleeps six hours ships better code than the team that sleeps three. tested. repeatedly.</span></div>', doors:[ {label:'deeper, to the last lit room', to:'checklist'}, {label:'back to the typing room', to:'prompts'} ] },
+checklist:{ content:true, title:'room v — the last lit room', body:'<p>before you push, both of you, out loud, check:</p><div class="lines"><span>repo link opens in incognito, on the other person\'s machine.</span><span>README has: what, why, setup steps, architecture, screenshots, video link.</span><span>video exists, is short, and shows the thing actually running.</span><span>every button does something — or is removed. dead buttons are dead points.</span><span>both teammates can explain every folder without opening it.</span><span>pushed before sat 23:00. not 23:01. the clock is the clock.</span></div>', doors:[ {label:'the last door', to:'exit'}, {label:'back to the junction', to:'junction'} ] },
+deadwide:{ title:'a wall, painted', body:'<p>the wide door was paint. your hand met flat wall. whoever built this place has a sense of humor, and it is not kind.</p>', doors:[ {label:'return to the gate', to:'gate'} ] },
+deadsilent:{ title:'the mirror room', body:'<p>the silent corridor ends in a mirror. it looks tired. you both agree to turn back without mentioning it.</p>', doors:[ {label:'back to the junction', to:'junction'} ] },
+exit:{ title:'the way out', body:'<p>that\'s the maze. everything useful it had, it gave you.</p><p>now close this tab, open your editor, and build something a sophomore will thank you for in June.</p>', doors:[ {label:'back to the surface', to:'INDEX'} ] },
+slot:{ title:'the slot', body:'<p>you walked every room, opened every door that mattered, and pressed your palm against at least one painted wall. the maze has nothing left to give you — except this:</p><div class="slot"><a class="slot-link" id="slotLink" href="#" target="_blank" rel="noopener">submit your work ↗</a><p class="slot-note">the form lives outside the maze. repo link, video, README — everything the house rules asked for. one submission per team.</p></div>', doors:[ {label:'back into the maze', to:'gate'}, {label:'back to the surface', to:'INDEX'} ] }
 };
 
 var CONTENT=['architecture','prompts','resources','seniors','checklist'];
 var seen={};
+try{ var saved=JSON.parse(localStorage.getItem(SEEN_KEY))||[]; for(var q=0;q<saved.length;q++){ if(ROOMS[saved[q]]&&ROOMS[saved[q]].content)seen[saved[q]]=true; } }catch(e){}
 
-// restore progress so reloading doesn't skip the walk
-try{
-  var saved=JSON.parse(localStorage.getItem(SEEN_KEY))||[];
-  for(var q=0;q<saved.length;q++){
-    if(ROOMS[saved[q]]&&ROOMS[saved[q]].content)seen[saved[q]]=true;
-  }
-}catch(e){}
-
-function persist(){
-  localStorage.setItem(SEEN_KEY,JSON.stringify(Object.keys(seen)));
-}
-
-function countSeen(){
-  var n=0;
-  for(var i=0;i<CONTENT.length;i++){if(seen[CONTENT[i]])n++}
-  return n;
-}
-
+function persist(){ localStorage.setItem(SEEN_KEY,JSON.stringify(Object.keys(seen))); }
+function countSeen(){ var n=0; for(var i=0;i<CONTENT.length;i++){if(seen[CONTENT[i]])n++} return n; }
 function unlocked(){return countSeen()===CONTENT.length}
 
 function go(id){
   if(id==='INDEX'){location.href=SURFACE;return}
   if(ROOMS[id].content){seen[id]=true;persist()}
-  render(id);
-  window.scrollTo(0,0);
+  render(id); window.scrollTo(0,0);
 }
 
 function render(id){
-  var r=ROOMS[id];
-  var n=countSeen();
-  var open=unlocked();
-
-  var html='<div class="fadein">';
-  html+='<div class="room-title">'+r.title+'</div>';
-  html+=r.body;
-
-  // doors. once unlocked, a new door exists everywhere except the slot itself.
+  var r=ROOMS[id]; var n=countSeen(); var open=unlocked();
+  var html='<div class="fadein"><div class="room-title">'+r.title+'</div>'+r.body;
   var doors=r.doors.slice();
-  if(open&&id!=='slot'){
-    doors.push({label:'a door that wasn\'t there before', to:'slot', neu:true});
-  }
+  if(open&&id!=='slot'){ doors.push({label:'a door that wasn\'t there before', to:'slot', neu:true}); }
   html+='<div class="doors">';
-  for(var i=0;i<doors.length;i++){
-    html+='<button class="door'+(doors[i].neu?' new':'')+'" data-to="'+doors[i].to+'">'+doors[i].label+'</button>';
-  }
+  for(var i=0;i<doors.length;i++){ html+='<button class="door'+(doors[i].neu?' new':'')+'" data-to="'+doors[i].to+'">'+doors[i].label+'</button>'; }
   html+='</div>';
-
   if(id==='exit'){
-    if(open){
-      html+='<div class="found">you found every room. rare. the slot is open — you know which door.</div>';
-    }else{
-      var missed=[];
-      for(var j=0;j<CONTENT.length;j++){
-        if(!seen[CONTENT[j]])missed.push(CONTENT[j]);
-      }
+    if(open){ html+='<div class="found">you found every room. rare. the slot is open — you know which door.</div>'; }
+    else{
+      var missed=[]; for(var j=0;j<CONTENT.length;j++){ if(!seen[CONTENT[j]])missed.push(CONTENT[j]); }
       html+='<div class="found">doors you never opened:</div><div class="doors">';
-      for(var k=0;k<missed.length;k++){
-        html+='<button class="door" data-to="'+missed[k]+'">'+ROOMS[missed[k]].title+'</button>';
-      }
-      html+='</div>';
-      html+='<div class="found">the submission slot stays sealed until every room has seen you. ('+n+'/5)</div>';
+      for(var k=0;k<missed.length;k++){ html+='<button class="door" data-to="'+missed[k]+'">'+ROOMS[missed[k]].title+'</button>'; }
+      html+='</div><div class="found">the submission slot stays sealed until every room has seen you. ('+n+'/5)</div>';
     }
   }
-
   html+='</div>';
-  var el=document.getElementById('room');
-  el.innerHTML=html;
-
-  if(id==='slot'){
-    document.getElementById('slotLink').href=SLOT_URL;
-  }
-
+  var el=document.getElementById('room'); el.innerHTML=html;
+  if(id==='slot'){ document.getElementById('slotLink').href=SLOT_URL; }
   var btns=el.querySelectorAll('.door');
-  for(var b=0;b<btns.length;b++){
-    btns[b].addEventListener('click',function(){go(this.getAttribute('data-to'))});
-  }
-
-  document.getElementById('progress').textContent=
-    open ? 'rooms found 5/5 — the slot is open'
-         : 'rooms found '+n+'/5';
+  for(var b=0;b<btns.length;b++){ btns[b].addEventListener('click',function(){go(this.getAttribute('data-to'))}); }
+  document.getElementById('progress').textContent= open ? 'rooms found 5/5 — the slot is open' : 'rooms found '+n+'/5';
 }
-
 go('gate');
 </script>
 
-<!-- same deterrents as the index -->
 <script>
 document.addEventListener('contextmenu',function(e){e.preventDefault()});
 document.addEventListener('dragstart',function(e){e.preventDefault()});
 document.addEventListener('keydown',function(e){
   var k=e.key;
-  if(k==='F12'||
-     (e.ctrlKey&&e.shiftKey&&['I','J','C','i','j','c'].indexOf(k)!==-1)||
-     (e.ctrlKey&&['u','U','s','S','p','P'].indexOf(k)!==-1)){
-    e.preventDefault();
-  }
+  if(k==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C','i','j','c'].indexOf(k)!==-1)||(e.ctrlKey&&['u','U','s','S','p','P'].indexOf(k)!==-1)){e.preventDefault();}
 });
 if(window.matchMedia&&matchMedia('(pointer:fine)').matches){
-  setInterval(function(){
-    var open=(window.outerWidth-window.innerWidth>170)||(window.outerHeight-window.innerHeight>170);
-    document.getElementById('overlay').classList.toggle('on',open);
-  },600);
+  setInterval(function(){ var open=(window.outerWidth-window.innerWidth>170)||(window.outerHeight-window.innerHeight>170); document.getElementById('overlay').classList.toggle('on',open); },600);
 }
 </script>
 </body>
