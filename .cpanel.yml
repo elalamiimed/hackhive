@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/elalamiimed/public_html/
+    - export DEPLOYPATH=/home/hitsfmec/public_html/
     - /bin/cp index.html $DEPLOYPATH
     - /bin/cp maze.html $DEPLOYPATH
