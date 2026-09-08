@@ -11,7 +11,9 @@ import { getStore } from "@netlify/blobs";
 var ACCESS_CODE = "HITSZ2025";
 var SEED = 20250401;
 var PREFIX = "m:";
-var store = getStore("hackhive-pot");
+// explicit strong consistency: a registration must be visible to the next
+// read immediately, otherwise list() can lag behind set() for up to 60s.
+var store = getStore({ name: "hackhive-pot", consistency: "strong" });
 
 function matchAtMs() {
   var sz = new Date(Date.now() + 8 * 3600 * 1000);
@@ -54,10 +56,12 @@ function pairs(names) {
 
 async function readPot() {
   var out = [];
-  var list = store.list({ prefix: PREFIX });
-  for await (var item of list) {
+  // list() auto-paginates and resolves to { blobs: [{ key, etag }, ...] }
+  var page = await store.list({ prefix: PREFIX });
+  var blobs = (page && page.blobs) ? page.blobs : [];
+  for (var i = 0; i < blobs.length; i++) {
     try {
-      var rec = await store.get(item.key, { type: "json" });
+      var rec = await store.get(blobs[i].key, { type: "json" });
       if (rec && rec.name && rec.token) { out.push(rec); }
     } catch (e) {
       // a single corrupt/missing record must not hide the whole pot;
