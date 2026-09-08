@@ -58,6 +58,7 @@ export default async function handler(req) {
     var code = String(body.code || "").trim();
     if (!name) { return Response.json({ error: "write your name first" }, { status: 400 }); }
     if (code !== ACCESS_CODE) { return Response.json({ error: "wrong code" }, { status: 403 }); }
+    if (matchAtMs() - Date.now() <= 0) { return Response.json({ error: "too late, teams are locked" }, { status: 403 }); }
     var pot2 = (await store.get("pot", { type: "json" })) || [];
     var dupe = pot2.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); });
     if (dupe) { return Response.json({ error: "already in the pot" }, { status: 409 }); }

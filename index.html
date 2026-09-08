@@ -223,15 +223,16 @@ function joinPot(){
   .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, status:r.status, j:j}; }); })
   .then(function(res){
     if(!res.ok){
-      if(res.status === 403){ showToast('wrong code. you\'re not supposed to be here.', true); }
-      else { showToast('server ' + res.status + ': ' + JSON.stringify(res.j).slice(0, 60), true); }
-      codeEl.classList.add('input-error');
+      var msg = (res.j && res.j.error) ? res.j.error : ('server ' + res.status);
+      showToast(msg, true);
+      if(res.status === 403 && /^wrong code/.test(msg)){ codeEl.classList.add('input-error'); }
       return;
     }
     localStorage.setItem(TOKEN_KEY, res.j.token); localStorage.setItem(ME_KEY, name);
     nameEl.value = ''; codeEl.value = ''; showToast('you\'re in. see you thursday 23:00.'); sync();
   })
   .catch(function(){
+    if(Date.now() >= localMatchAt()){ showToast('too late — teams are locked', true); return; }
     if(code !== LOCAL_FALLBACK_CODE){ showToast('wrong code. you\'re not supposed to be here.', true); codeEl.classList.add('input-error'); return; }
     var p = localPot();
     for(var i = 0; i < p.length; i++){ if(p[i].name === name){ showToast('you\'re already in the pot', true); return; } }
@@ -252,13 +253,19 @@ function withdrawApp(){
     withdrawTimer = setTimeout(function(){ btn.classList.remove('arm'); btn.textContent = 'withdraw application'; }, 3000); return;
   }
   clearTimeout(withdrawTimer); var token = localStorage.getItem(TOKEN_KEY);
+  function resetBtn(){
+    btn.classList.remove('arm'); btn.textContent = 'withdraw application';
+  }
   function cleanup(){
     localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(ME_KEY);
-    btn.classList.remove('arm'); btn.textContent = 'withdraw application';
-    showToast('application withdrawn.'); sync();
+    resetBtn(); showToast('application withdrawn.'); sync();
   }
   fetch(API, { method:'DELETE', headers:{'content-type':'application/json'}, body: JSON.stringify({token:token}) })
-  .then(cleanup)
+  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); })
+  .then(function(res){
+    if(!res.ok){ resetBtn(); showToast((res.j && res.j.error) || ('server ' + res.status), true); return; }
+    cleanup();
+  })
   .catch(function(){ localSave(localPot().filter(function(p){ return p.token !== token; })); cleanup(); });
 }
 
