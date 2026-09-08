@@ -1,10 +1,16 @@
 // netlify/functions/pot.mjs
 // shared pot. deliberately plain syntax: no arrow functions, no bitwise
 // operators, no destructuring. nothing a copy-paste tool can mangle.
+//
+// members are stored as separate blobs ("m:<uuid>") instead of one growing
+// array. a single "pot" key with read-modify-write loses registrations when
+// two joins race (both read the old list, the later write wins and silently
+// erases the earlier member). per-member keys make a join append-only.
 import { getStore } from "@netlify/blobs";
 
 var ACCESS_CODE = "HITSZ2025";
 var SEED = 20250401;
+var PREFIX = "m:";
 var store = getStore("hackhive-pot");
 
 function matchAtMs() {
@@ -32,9 +38,9 @@ function seededShuffle(arr, seed) {
   return a;
 }
 
-function pairs(pot) {
+function pairs(names) {
   if (matchAtMs() - Date.now() <= 0) {
-    var s = seededShuffle(pot.map(function (p) { return p.name; }), SEED);
+    var s = seededShuffle(names, SEED);
     var m = {};
     for (var i = 0; i + 1 < s.length; i += 2) {
       m[s[i]] = s[i + 1];
@@ -46,10 +52,27 @@ function pairs(pot) {
   return null;
 }
 
+async function readPot() {
+  var out = [];
+  try {
+    for await (var item of store.list({ prefix: PREFIX })) {
+      var rec = await store.get(item.key, { type: "json" });
+      if (rec && rec.name && rec.token) { out.push(rec); }
+    }
+  } catch (e) {}
+  // insertion order, ties broken by name so every viewer sorts identically
+  out.sort(function (a, b) {
+    if (a.at !== b.at) { return a.at - b.at; }
+    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+  });
+  return out;
+}
+
 export default async function handler(req) {
   if (req.method === "GET") {
-    var pot = (await store.get("pot", { type: "json" })) || [];
-    return Response.json({ pot: pot.map(function (p) { return p.name; }), matched: pairs(pot), matchAt: matchAtMs() });
+    var pot = await readPot();
+    var names = pot.map(function (p) { return p.name; });
+    return Response.json({ pot: names, matched: pairs(names), matchAt: matchAtMs() });
   }
 
   if (req.method === "POST") {
@@ -59,12 +82,11 @@ export default async function handler(req) {
     if (!name) { return Response.json({ error: "write your name first" }, { status: 400 }); }
     if (code !== ACCESS_CODE) { return Response.json({ error: "wrong code" }, { status: 403 }); }
     if (matchAtMs() - Date.now() <= 0) { return Response.json({ error: "too late, teams are locked" }, { status: 403 }); }
-    var pot2 = (await store.get("pot", { type: "json" })) || [];
+    var pot2 = await readPot();
     var dupe = pot2.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); });
     if (dupe) { return Response.json({ error: "already in the pot" }, { status: 409 }); }
     var token = crypto.randomUUID();
-    pot2.push({ name: name, token: token, at: Date.now() });
-    await store.set("pot", JSON.stringify(pot2));
+    await store.set(PREFIX + token, JSON.stringify({ name: name, token: token, at: Date.now() }));
     return Response.json({ ok: true, token: token });
   }
 
@@ -72,10 +94,13 @@ export default async function handler(req) {
     if (matchAtMs() - Date.now() <= 0) { return Response.json({ error: "too late, teams are locked" }, { status: 403 }); }
     var body3 = await req.json().catch(function () { return {}; });
     var token3 = String(body3.token || "");
-    var pot3 = (await store.get("pot", { type: "json" })) || [];
-    var next = pot3.filter(function (p) { return p.token !== token3; });
-    if (next.length === pot3.length) { return Response.json({ error: "not found" }, { status: 404 }); }
-    await store.set("pot", JSON.stringify(next));
+    var pot3 = await readPot();
+    var gone = false;
+    for (var i = 0; i < pot3.length; i++) {
+      if (pot3[i].token === token3) { gone = true; break; }
+    }
+    if (!gone) { return Response.json({ error: "not found" }, { status: 404 }); }
+    await store.delete(PREFIX + token3);
     return Response.json({ ok: true });
   }
 
