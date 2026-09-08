@@ -170,7 +170,7 @@ var LOCAL_FALLBACK_CODE = 'HITSZ2025';
 var ME_KEY = 'studybuddy_me';
 var TOKEN_KEY = 'studybuddy_token';
 var LOCAL_POT = 'studybuddy_pot_local';
-var state = { pot: [], matched: null, matchAt: null, mode: 'remote' };
+var state = { pot: [], matched: null, matchAt: null, mode: 'remote', ok: false };
 
 function showToast(msg, isError){
   var t = document.getElementById('toast');
@@ -203,10 +203,19 @@ function localMatched(names){
 function sync(){
   return fetch(API, {cache:'no-store'})
     .then(function(r){ if(!r.ok) throw 0; return r.json(); })
-    .then(function(j){ state.mode = 'remote'; state.pot = j.pot || []; state.matched = j.matched || null; state.matchAt = j.matchAt || null; })
+    .then(function(j){
+      state.ok = true; state.mode = 'remote';
+      state.pot = j.pot || []; state.matched = j.matched || null; state.matchAt = j.matchAt || null;
+    })
     .catch(function(){
-      state.mode = 'local'; var names = localPot().map(function(p){ return p.name; });
-      state.pot = names; state.matched = localMatched(names); state.matchAt = localMatchAt();
+      if(state.ok){
+        // transient network/5xx blip: keep the last good server snapshot so
+        // the pot doesn't vanish and reappear on every failed poll.
+        state.mode = 'remote';
+      } else {
+        state.mode = 'local'; var names = localPot().map(function(p){ return p.name; });
+        state.pot = names; state.matched = localMatched(names); state.matchAt = localMatchAt();
+      }
     })
     .then(function(){ renderPot(); renderMatch(); });
 }

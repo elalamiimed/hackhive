@@ -54,12 +54,16 @@ function pairs(names) {
 
 async function readPot() {
   var out = [];
-  try {
-    for await (var item of store.list({ prefix: PREFIX })) {
+  var list = store.list({ prefix: PREFIX });
+  for await (var item of list) {
+    try {
       var rec = await store.get(item.key, { type: "json" });
       if (rec && rec.name && rec.token) { out.push(rec); }
+    } catch (e) {
+      // a single corrupt/missing record must not hide the whole pot;
+      // skip it and keep going.
     }
-  } catch (e) {}
+  }
   // insertion order, ties broken by name so every viewer sorts identically
   out.sort(function (a, b) {
     if (a.at !== b.at) { return a.at - b.at; }
@@ -70,8 +74,15 @@ async function readPot() {
 
 export default async function handler(req) {
   if (req.method === "GET") {
-    var pot = await readPot();
-    var names = pot.map(function (p) { return p.name; });
+    var pot, names;
+    try {
+      pot = await readPot();
+      names = pot.map(function (p) { return p.name; });
+    } catch (e) {
+      // never report a transient storage error as "nobody has registered" —
+      // that would make every client flash an empty pot.
+      return Response.json({ error: "pot temporarily unavailable" }, { status: 503 });
+    }
     return Response.json({ pot: names, matched: pairs(names), matchAt: matchAtMs() });
   }
 
@@ -82,7 +93,9 @@ export default async function handler(req) {
     if (!name) { return Response.json({ error: "write your name first" }, { status: 400 }); }
     if (code !== ACCESS_CODE) { return Response.json({ error: "wrong code" }, { status: 403 }); }
     if (matchAtMs() - Date.now() <= 0) { return Response.json({ error: "too late, teams are locked" }, { status: 403 }); }
-    var pot2 = await readPot();
+    var pot2;
+    try { pot2 = await readPot(); }
+    catch (e) { return Response.json({ error: "pot temporarily unavailable" }, { status: 503 }); }
     var dupe = pot2.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); });
     if (dupe) { return Response.json({ error: "already in the pot" }, { status: 409 }); }
     var token = crypto.randomUUID();
@@ -94,7 +107,9 @@ export default async function handler(req) {
     if (matchAtMs() - Date.now() <= 0) { return Response.json({ error: "too late, teams are locked" }, { status: 403 }); }
     var body3 = await req.json().catch(function () { return {}; });
     var token3 = String(body3.token || "");
-    var pot3 = await readPot();
+    var pot3;
+    try { pot3 = await readPot(); }
+    catch (e) { return Response.json({ error: "pot temporarily unavailable" }, { status: 503 }); }
     var gone = false;
     for (var i = 0; i < pot3.length; i++) {
       if (pot3[i].token === token3) { gone = true; break; }
