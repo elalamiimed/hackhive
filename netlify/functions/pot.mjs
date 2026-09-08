@@ -57,15 +57,20 @@ async function readPot() {
   // list() auto-paginates and resolves to { blobs: [{ key, etag }, ...] }
   var page = await store.list({ prefix: PREFIX });
   var blobs = (page && page.blobs) ? page.blobs : [];
+  var readErr = null;
   for (var i = 0; i < blobs.length; i++) {
     try {
       var rec = await store.get(blobs[i].key, { type: "json" });
       if (rec && rec.name && rec.token) { out.push(rec); }
     } catch (e) {
-      // a single corrupt/missing record must not hide the whole pot;
-      // skip it and keep going.
+      // never silently truncate the pot: a truncated 200 would make every
+      // client replace the real roster with an empty pot. abort the read
+      // instead so the handler returns 503 and viewers keep the last good
+      // snapshot.
+      readErr = e;
     }
   }
+  if (readErr) { throw readErr; }
   // insertion order, ties broken by name so every viewer sorts identically
   out.sort(function (a, b) {
     if (a.at !== b.at) { return a.at - b.at; }
