@@ -223,7 +223,6 @@ function joinPot(){
   .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, status:r.status, j:j}; }); })
   .then(function(res){
     if(!res.ok){
-      // 403 = wrong code, say it kindly. anything else: show the server's raw answer.
       if(res.status === 403){ showToast('wrong code. you\'re not supposed to be here.', true); }
       else { showToast('server ' + res.status + ': ' + JSON.stringify(res.j).slice(0, 60), true); }
       codeEl.classList.add('input-error');
