@@ -8,6 +8,10 @@
 // Storage is a JSON file kept OUTSIDE the web root, so it is never
 // downloadable and needs no database setup:
 //     <home>/pot_data/pot.json     (created automatically on first request)
+//
+// Every request is wrapped so the endpoint always answers JSON — even if a
+// host blocks a built-in function, the browser sees a clean error, never a
+// blank 500 page.
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -37,14 +41,17 @@ function ensure_store() {
     }
 }
 
+// read the whole store under a shared lock (lock skipped if a host disabled flock)
 function load_entries() {
+    global $DATA_FILE;
     ensure_store();
-    $fp = @fopen($DATA_FILE, 'r');
-    if (!$fp || !flock($fp, LOCK_SH)) {
+    $fp = @fopen($DATA_FILE, 'c+');
+    if (!$fp) {
         respond(array('error' => 'pot temporarily unavailable'), 503);
     }
+    $locked = function_exists('flock') && @flock($fp, LOCK_SH);
     $raw = stream_get_contents($fp);
-    flock($fp, LOCK_UN);
+    if ($locked) { flock($fp, LOCK_UN); }
     fclose($fp);
     $arr = json_decode($raw, true);
     return is_array($arr) ? $arr : array();
@@ -55,9 +62,10 @@ function update_entries($fn) {
     global $DATA_FILE;
     ensure_store();
     $fp = @fopen($DATA_FILE, 'c+');
-    if (!$fp || !flock($fp, LOCK_EX)) {
+    if (!$fp) {
         respond(array('error' => 'pot temporarily unavailable'), 503);
     }
+    $locked = function_exists('flock') && @flock($fp, LOCK_EX);
     $raw = stream_get_contents($fp);
     $arr = json_decode($raw, true);
     if (!is_array($arr)) { $arr = array(); }
@@ -66,20 +74,19 @@ function update_entries($fn) {
     rewind($fp);
     fwrite($fp, json_encode(array_values($arr)));
     fflush($fp);
-    flock($fp, LOCK_UN);
+    if ($locked) { flock($fp, LOCK_UN); }
     fclose($fp);
 }
 
+// Names are stored in signup order (oldest first) and the file is only ever
+// appended under a lock, so file order already IS chronological order. We
+// return them as-is and let the page do any display-side ordering — no sort
+// functions needed here (some hosts disable them, which crashed the old GET).
 function names_from_entries($entries) {
-    $byName = array();
-    foreach ($entries as $e) { $byName[] = $e; }
-    usort($byName, function ($a, $b) {
-        $c = $a['created_at'] - $b['created_at'];
-        if ($c === 0) { return strcasecmp($a['name'], $b['name']); }
-        return $c;
-    });
     $names = array();
-    foreach ($byName as $e) { $names[] = $e['name']; }
+    foreach ($entries as $e) {
+        if (isset($e['name'])) { $names[] = $e['name']; }
+    }
     return $names;
 }
 
@@ -126,69 +133,77 @@ function build_matched($names) {
     return (object) $m;
 }
 
-$method = $_SERVER['REQUEST_METHOD'];
+// ---- dispatch (everything guarded so the response is always JSON) ----------
+try {
 
-if ($method === 'OPTIONS') { http_response_code(200); exit; }
+    $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
-if ($method === 'GET') {
-    $names = names_from_entries(load_entries());
-    respond(array(
-        'pot'     => $names,
-        'matched' => build_matched($names),
-        'matchAt' => match_at_ms()
-    ));
-}
+    if ($method === 'OPTIONS') { http_response_code(200); exit; }
 
-if ($method === 'POST') {
-    $raw  = file_get_contents('php://input');
-    $body = json_decode($raw === false ? '' : $raw, true);
-    if (!is_array($body)) { $body = array(); }
-
-    $name = trim(isset($body['name']) ? (string) $body['name'] : '');
-    $code = isset($body['code']) ? (string) $body['code'] : '';
-    if (function_exists('mb_substr')) {
-        $name = mb_substr($name, 0, 40);
-    } else {
-        $name = substr($name, 0, 40);
+    if ($method === 'GET') {
+        $names = names_from_entries(load_entries());
+        respond(array(
+            'pot'     => $names,
+            'matched' => build_matched($names),
+            'matchAt' => match_at_ms()
+        ));
     }
-    if ($name === '') { respond(array('error' => 'write your name first'), 400); }
-    if ($code !== $ACCESS_CODE) { respond(array('error' => 'wrong code'), 403); }
-    if (is_locked()) { respond(array('error' => 'too late, teams are locked'), 403); }
 
-    $token = bin2hex(random_bytes(16));
-    $at    = (int) round(microtime(true) * 1000);
-    update_entries(function ($arr) use ($name, $token, $at) {
-        foreach ($arr as $e) {
-            if (strcasecmp($e['name'], $name) === 0) {
-                respond(array('error' => 'already in the pot'), 409);
+    if ($method === 'POST') {
+        $raw  = file_get_contents('php://input');
+        $body = json_decode($raw === false ? '' : $raw, true);
+        if (!is_array($body)) { $body = array(); }
+
+        $name = trim(isset($body['name']) ? (string) $body['name'] : '');
+        $code = isset($body['code']) ? (string) $body['code'] : '';
+        if (function_exists('mb_substr')) {
+            $name = mb_substr($name, 0, 40);
+        } else {
+            $name = substr($name, 0, 40);
+        }
+        if ($name === '') { respond(array('error' => 'write your name first'), 400); }
+        if ($code !== $ACCESS_CODE) { respond(array('error' => 'wrong code'), 403); }
+        if (is_locked()) { respond(array('error' => 'too late, teams are locked'), 403); }
+
+        $token = function_exists('random_bytes') ? bin2hex(random_bytes(16)) : md5(uniqid($name, true));
+        $at    = (int) round(microtime(true) * 1000);
+        update_entries(function ($arr) use ($name, $token, $at) {
+            foreach ($arr as $e) {
+                if (isset($e['name']) && strcasecmp($e['name'], $name) === 0) {
+                    respond(array('error' => 'already in the pot'), 409);
+                }
             }
-        }
-        $arr[] = array('name' => $name, 'token' => $token, 'created_at' => $at);
-        return $arr;
-    });
-    respond(array('ok' => true, 'token' => $token));
+            $arr[] = array('name' => $name, 'token' => $token, 'created_at' => $at);
+            return $arr;
+        });
+        respond(array('ok' => true, 'token' => $token));
+    }
+
+    if ($method === 'DELETE') {
+        if (is_locked()) { respond(array('error' => 'too late, teams are locked'), 403); }
+
+        $raw  = file_get_contents('php://input');
+        $body = json_decode($raw === false ? '' : $raw, true);
+        if (!is_array($body)) { $body = array(); }
+        $token = isset($body['token']) ? (string) $body['token'] : '';
+        if ($token === '') { respond(array('error' => 'not found'), 404); }
+
+        $found = false;
+        update_entries(function ($arr) use ($token, &$found) {
+            $out = array();
+            foreach ($arr as $e) {
+                if (isset($e['token']) && $e['token'] === $token) { $found = true; continue; }
+                $out[] = $e;
+            }
+            if (!$found) { respond(array('error' => 'not found'), 404); }
+            return $out;
+        });
+        respond(array('ok' => true));
+    }
+
+    respond(array('error' => 'method not allowed'), 405);
+
+} catch (\Throwable $e) {
+    if (function_exists('error_log')) { @error_log('pot.php: ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine()); }
+    respond(array('error' => 'pot temporarily unavailable'), 500);
 }
-
-if ($method === 'DELETE') {
-    if (is_locked()) { respond(array('error' => 'too late, teams are locked'), 403); }
-
-    $raw  = file_get_contents('php://input');
-    $body = json_decode($raw === false ? '' : $raw, true);
-    if (!is_array($body)) { $body = array(); }
-    $token = isset($body['token']) ? (string) $body['token'] : '';
-    if ($token === '') { respond(array('error' => 'not found'), 404); }
-
-    $found = false;
-    update_entries(function ($arr) use ($token, &$found) {
-        $out = array();
-        foreach ($arr as $e) {
-            if ($e['token'] === $token) { $found = true; continue; }
-            $out[] = $e;
-        }
-        if (!$found) { respond(array('error' => 'not found'), 404); }
-        return $out;
-    });
-    respond(array('ok' => true));
-}
-
-respond(array('error' => 'method not allowed'), 405);
