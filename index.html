@@ -77,10 +77,10 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
 <div class="page">
   <div class="topbar"><span>study buddy</span><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS ↗</a></div>
   <div class="hero fade">
-    <h1>Study Buddy.<br/><em>a 47-hour hackathon.</em></h1>
+    <h1>Study Buddy.<br/><em>a 71-hour hackathon.</em></h1>
     <p>We want a simple, friendly platform where HITSZ students can find someone to study with, ask a senior for help before an exam, or just share notes without the hassle. CS students come first. That's it. Build it your way.</p>
   </div>
-  <div class="deadline fade"><span class="label">Window</span><span class="time">Friday 00:00 → Saturday 23:00 (Shenzhen)</span></div>
+  <div class="deadline fade"><span class="label">Window</span><span class="time">Friday 00:00 → Sunday 23:00 (Shenzhen)</span></div>
   <div class="countdown fade" id="cd">
     <div class="unit"><div class="num" id="ch">--</div><div class="lbl">hours</div></div>
     <div class="unit"><div class="num" id="cm">--</div><div class="lbl">min</div></div>
@@ -126,13 +126,13 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
   </section>
 
   <section class="fade">
-    <div class="sec-label">Timeline</div><h2>How the 47 hours go</h2>
+    <div class="sec-label">Timeline</div><h2>How the 71 hours go</h2>
     <div class="tl">
       <div class="tl-row"><span class="t">Thu 23:00</span><span class="d"><strong>Matching.</strong> Solo participants get paired into teams of two.</span></div>
       <div class="tl-row"><span class="t">Fri 00:00</span><span class="d"><strong>Start.</strong> Portal opens. Meet your teammate, pick an idea, go.</span></div>
       <div class="tl-row"><span class="t">Fri 12:00</span><span class="d">Optional check-in. Post a screenshot if you want. No pressure.</span></div>
-      <div class="tl-row"><span class="t">Sat 18:00</span><span class="d">Five hours left. Wrap up, test, record your video.</span></div>
-      <div class="tl-row"><span class="t">Sat 23:00</span><span class="d"><strong>Done.</strong> Push your repo, submit the link. Judging starts.</span></div>
+      <div class="tl-row"><span class="t">Sun 18:00</span><span class="d">Five hours left. Wrap up, test, screenshot your work.</span></div>
+      <div class="tl-row"><span class="t">Sun 23:00</span><span class="d"><strong>Done.</strong> Push your repo, submit the link. Judging starts.</span></div>
     </div>
   </section>
 
@@ -143,7 +143,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
       <li><span><strong>Hack Hive members only.</strong> This is an in-house event. The access code is your proof of membership.</span></li>
       <li><span><strong>Vibecoding counts.</strong> AI-assisted or hand-written, both are fine. Ship however you work — just understand every line you submit.</span></li>
       <li><span><strong>Desktop only.</strong> Web or native, but it runs on a desktop. Mobile is out of scope; don't burn hours on it.</span></li>
-      <li><span><strong>Repo link + video.</strong> No live demo session — the video is your demo. And write real documentation: setup, architecture, decisions, all in README.md.</span></li>
+      <li><span><strong>Repo link + image.</strong> No live demo session — screenshots are your demo. And write real documentation: setup, architecture, decisions, all in README.md.</span></li>
       <li><span><strong>Frontend and architecture carry weight.</strong> Judges look hard at how it looks and how it's structured. Sloppy folders cost points.</span></li>
       <li><span><strong>CS students come first.</strong> If it doesn't actually help a CS student survive the semester, it misses the point.</span></li>
       <li><span><strong>Judges' decisions are final.</strong> Criteria: does it work, is it usable, is it thoughtful. No appeals, no hard feelings.</span></li>
@@ -294,7 +294,7 @@ function renderMatch(){
     var me = localStorage.getItem(ME_KEY);
     if(me && state.matched[me] !== undefined){
       partner.textContent = state.matched[me] || '(no partner — odd number, check back)';
-      cdEl.textContent = 'go find them. you have 47 hours.';
+      cdEl.textContent = 'go find them. you have 71 hours.';
     } else { partner.textContent = '(teams are locked)'; cdEl.textContent = Math.floor(state.pot.length / 2) + ' teams formed.'; }
     return;
   }
@@ -319,7 +319,7 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   if(!H||!M||!S)return;
   function szNow(){ try{ return new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Shanghai'})); }catch(e){ return new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000); } }
   function msToDeadline(){
-    var sz=szNow(); var d=new Date(sz.getTime()); var diff=(6-d.getDay()+7)%7;
+    var sz=szNow(); var d=new Date(sz.getTime()); var diff=(0-d.getDay()+7)%7;
     if(diff===0&&d.getHours()>=23)diff=7; d.setDate(d.getDate()+diff); d.setHours(23,0,0,0); return d.getTime()-sz.getTime();
   }
   var end=Date.now()+msToDeadline();
