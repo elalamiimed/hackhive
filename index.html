@@ -220,11 +220,14 @@ function joinPot(){
   if(!code){ showToast('you need the access code', true); codeEl.classList.add('input-error'); return; }
 
   fetch(API, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({name:name, code:code}) })
-  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); })
+  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, status:r.status, j:j}; }); })
   .then(function(res){
     if(!res.ok){
-      showToast(res.j.error === 'wrong code' ? 'wrong code. you\'re not supposed to be here.' : (res.j.error || 'nope'), true);
-      codeEl.classList.add('input-error'); return;
+      // 403 = wrong code, say it kindly. anything else: show the server's raw answer.
+      if(res.status === 403){ showToast('wrong code. you\'re not supposed to be here.', true); }
+      else { showToast('server ' + res.status + ': ' + JSON.stringify(res.j).slice(0, 60), true); }
+      codeEl.classList.add('input-error');
+      return;
     }
     localStorage.setItem(TOKEN_KEY, res.j.token); localStorage.setItem(ME_KEY, name);
     nameEl.value = ''; codeEl.value = ''; showToast('you\'re in. see you thursday 23:00.'); sync();
