@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Study Buddy — a HITSZCS hackathon</title>
+<title>HITSZCS — by CS students, to CS students</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#000;--dot:#141414;--white:#d4d4d4;--dim:#555;--faint:#333}
@@ -13,147 +13,94 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 24px}
 .topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--dim);letter-spacing:.02em}
 .topbar a{color:var(--dim);text-decoration:none}.topbar a:hover{color:var(--white)}
-.hero{padding:120px 0 80px}
-.hero h1{font-size:clamp(2.4rem,6vw,3.6rem);font-weight:400;letter-spacing:-.03em;line-height:1.15;color:#e8e8e8}
-.hero h1 em{font-style:normal;color:var(--dim)}
-.hero p{margin-top:28px;font-size:15px;color:var(--dim);max-width:480px;line-height:1.8}
-.deadline{border-top:1px solid var(--faint);border-bottom:1px solid var(--faint);padding:28px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.deadline .label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim)}
-.deadline .time{font-size:14px;color:#e8e8e8;font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.countdown{padding:48px 0;display:flex;gap:32px}
-.countdown .unit{text-align:left}
-.countdown .num{font-size:clamp(2rem,5vw,3rem);font-weight:300;letter-spacing:-.02em;color:#e8e8e8;font-variant-numeric:tabular-nums;line-height:1}
-.countdown .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-top:6px}
-section{padding:56px 0}section+section{border-top:1px solid var(--faint)}
+.hero{padding:120px 0 72px}
+.hero h1{font-size:clamp(2.6rem,7vw,4rem);font-weight:400;letter-spacing:-.03em;line-height:1.12;color:#e8e8e8}
+.hero h1 em{font-style:normal;color:var(--dim);display:block;margin-top:18px;font-size:clamp(1.1rem,2.6vw,1.4rem);letter-spacing:.01em}
+.hero p{margin-top:30px;font-size:15px;color:var(--dim);max-width:500px;line-height:1.85}
+section{padding:52px 0}section+section{border-top:1px solid var(--faint)}
 .sec-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);margin-bottom:20px}
 h2{font-size:20px;font-weight:400;letter-spacing:-.01em;color:#e0e0e0;margin-bottom:16px}
-.body-text{font-size:14px;color:var(--dim);line-height:1.85;max-width:520px}
-.feat-list{list-style:none;margin-top:24px}
-.feat-list li{padding:14px 0;border-bottom:1px solid #111;font-size:14px;color:var(--dim);display:flex;gap:16px;align-items:baseline}
-.feat-list li:last-child{border-bottom:none}
-.feat-list .idx{font-size:12px;color:var(--faint);min-width:20px;font-variant-numeric:tabular-nums}
-.feat-list .txt strong{color:#c8c8c8;font-weight:400;display:block;margin-bottom:2px}
-.tl{margin-top:24px}
-.tl-row{display:flex;gap:24px;padding:12px 0;font-size:14px;align-items:baseline}
-.tl-row .t{min-width:100px;color:var(--faint);font-size:13px;font-variant-numeric:tabular-nums;flex-shrink:0}
-.tl-row .d{color:var(--dim)}.tl-row .d strong{color:#c0c0c0;font-weight:400}
-.rules{list-style:none;margin-top:20px;counter-reset:r}
-.rules li{counter-increment:r;padding:10px 0;font-size:14px;color:var(--dim);display:flex;gap:14px;align-items:baseline}
-.rules li::before{content:counter(r);font-size:12px;color:var(--faint);min-width:16px;font-variant-numeric:tabular-nums}
-.rules li strong{color:#c0c0c0;font-weight:400}
-.join-box{margin-top:24px}.join-fields{display:flex;flex-direction:column;gap:12px}
-.join-fields input{width:100%;background:transparent;border:1px solid var(--faint);padding:10px 16px;font-size:14px;color:var(--white);font-family:inherit;outline:none;transition:border-color .2s}
-.join-fields input::placeholder{color:#3a3a3a}.join-fields input:focus{border-color:var(--dim)}.join-fields input.input-error{border-color:#6b3030}
-.join-submit{margin-top:4px;background:transparent;border:1px solid var(--faint);color:var(--white);padding:10px 24px;font-size:13px;font-family:inherit;cursor:pointer;letter-spacing:.03em;transition:border-color .2s;align-self:flex-start}
-.join-submit:hover{border-color:var(--dim)}.join-submit:active{border-color:#888}
-.join-note{margin-top:16px;font-size:13px;color:var(--faint);line-height:1.7}
-.pot-list{margin-top:28px;padding-top:20px;border-top:1px solid #111}
-.pot-list .pot-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);margin-bottom:12px}
-.pot-names{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
-.pot-names li{font-size:13px;color:#999;padding:4px 12px;border:1px solid #1a1a1a;border-radius:2px}
-.pot-count{margin-top:14px;font-size:12px;color:var(--faint)}
-.withdraw-row{margin-top:18px;padding-top:16px;border-top:1px solid #111;font-size:13px;color:var(--dim);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.withdraw-row .me{color:#c0c0c0}
-.withdraw-btn{background:transparent;border:1px solid #222;color:#777;padding:6px 16px;font:inherit;font-size:12px;letter-spacing:.03em;cursor:pointer;transition:border-color .2s,color .2s}
-.withdraw-btn:hover{border-color:var(--dim);color:#bbb}.withdraw-btn.arm{border-color:#5a2a2a;color:#a06060}
-.match-info{margin-top:24px;padding:16px 0;border-top:1px solid #111;font-size:13px;color:var(--dim);line-height:1.7}
-.match-info .partner{color:#c0c0c0;font-weight:400}
-.match-countdown{margin-top:12px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
-.cta{padding:64px 0;border-top:1px solid var(--faint)}.cta p{font-size:14px;color:var(--dim);margin-bottom:24px}
-.cta a.btn{display:inline-block;padding:10px 28px;border:1px solid var(--faint);color:var(--white);text-decoration:none;font-size:13px;letter-spacing:.03em;transition:border-color .2s}
-.cta a.btn:hover{border-color:var(--dim)}
+p.body-text{font-size:14px;color:var(--dim);line-height:1.85;max-width:520px}
+ul.list{list-style:none;margin-top:24px}
+ul.list li{padding:14px 0;border-bottom:1px solid #111;font-size:14px;color:var(--dim);display:flex;gap:16px;align-items:baseline}
+ul.list li:last-child{border-bottom:none}
+ul.list .idx{font-size:12px;color:var(--faint);min-width:20px;font-variant-numeric:tabular-nums}
+ul.list .txt strong{color:#c8c8c8;font-weight:400;display:block;margin-bottom:2px}
+ul.rules{list-style:none;margin-top:20px;counter-reset:r}
+ul.rules li{counter-increment:r;padding:10px 0;font-size:14px;color:var(--dim);display:flex;gap:14px;align-items:baseline}
+ul.rules li::before{content:counter(r);font-size:12px;color:var(--faint);min-width:16px;font-variant-numeric:tabular-nums}
+ul.rules li strong{color:#c0c0c0;font-weight:400}
+.doors{margin-top:24px}
+.door{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:18px 0;border-bottom:1px solid #111;text-decoration:none}
+.door:first-child{border-top:1px solid #111}
+.door:hover{border-bottom-color:var(--dim)}
+.door .d-title{font-size:15px;color:#c8c8c8;letter-spacing:.01em}
+.door:hover .d-title{color:#fff}
+.door .d-sub{font-size:12px;color:var(--faint);margin-top:3px}
+.door .d-arrow{color:var(--faint);font-size:14px;transition:color .2s}
+.door:hover .d-arrow{color:#888}
 footer{padding:40px 0 60px;border-top:1px solid #111;font-size:12px;color:var(--faint)}
 footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)}
-.whisper{margin-top:22px;font-size:11px;line-height:1.6}
+.whisper{margin-top:24px;font-size:11px;line-height:1.6}
 .whisper a{color:#1e1e1e;text-decoration:none;transition:color .3s}.whisper a:hover{color:#666}
 .fade{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}.fade.in{opacity:1;transform:none}
-.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:#111;border:1px solid #222;color:#ccc;font-size:13px;padding:10px 20px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:99}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.toast.error{border-color:#3a2020;color:#a06060}
-.overlay{position:fixed;inset:0;background:#000;z-index:999;display:none;align-items:center;justify-content:center;text-align:center;color:#555;font-size:14px;line-height:2.2}.overlay.on{display:flex}
-@media(max-width:520px){.deadline{flex-direction:column;align-items:flex-start;gap:8px}.countdown{gap:24px}.tl-row{flex-direction:column;gap:2px}.tl-row .t{min-width:auto}}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="topbar"><span>study buddy</span><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS ↗</a></div>
+  <div class="topbar"><span>HITSZCS</span><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">GitHub ↗</a></div>
+
   <div class="hero fade">
-    <h1>Study Buddy.<br/><em>a 71-hour hackathon.</em></h1>
-    <p>We want a simple, friendly platform where HITSZ students can find someone to study with, ask a senior for help before an exam, or just share notes without the hassle. CS students come first. That's it. Build it your way.</p>
-  </div>
-  <div class="deadline fade"><span class="label">Window</span><span class="time">Friday 00:00 → Sunday 23:00 (Shenzhen)</span></div>
-  <div class="countdown fade" id="cd">
-    <div class="unit"><div class="num" id="ch">--</div><div class="lbl">hours</div></div>
-    <div class="unit"><div class="num" id="cm">--</div><div class="lbl">min</div></div>
-    <div class="unit"><div class="num" id="cs">--</div><div class="lbl">sec</div></div>
+    <h1>HITSZCS.<em>by CS students, to CS students.</em></h1>
+    <p>Every semester, the same questions echo through group chats — which course, which book, what was on the exam, how do you survive this one. We've been through them, and we believe the next year of students shouldn't have to rediscover it all alone. So we write it down, and we hand it forward.</p>
   </div>
 
-  <section class="fade" id="join">
-    <div class="sec-label">Solo? No problem.</div>
-    <h2>Join the pot</h2>
-    <p class="body-text">Don't have a teammate yet? Drop your name in. One hour before the hackathon starts, everyone in the pot gets paired into teams of two. You'll see your partner's name here, then it's on you two to talk and start building.</p>
-    <div class="join-box">
-      <div class="join-fields">
-        <input type="text" id="nameInput" placeholder="your name" maxlength="40" autocomplete="off"/>
-        <input type="text" id="codeInput" placeholder="access code" maxlength="20" autocomplete="off"/>
-        <button class="join-submit" onclick="joinPot()">I'm in</button>
-      </div>
-      <p class="join-note">Hack Hive members only — the access code is your proof of membership. Matching happens Thursday 23:00 Shenzhen time. Teams are exactly two people. Names sync live: what you see, everyone sees.</p>
-    </div>
-    <div class="pot-list" id="potList" style="display:none">
-      <div class="pot-label">In the pot</div>
-      <ul class="pot-names" id="potNames"></ul>
-      <div class="pot-count" id="potCount"></div>
-      <div class="withdraw-row" id="withdrawRow" style="display:none">
-        <span>you're in as <span class="me" id="meName"></span></span>
-        <button class="withdraw-btn" id="withdrawBtn" onclick="withdrawApp()">withdraw application</button>
-      </div>
-    </div>
-    <div class="match-info" id="matchInfo" style="display:none">
-      You're paired with <span class="partner" id="partnerName"></span>.<br/>Find them. Say hi. Start building.
-      <div class="match-countdown" id="matchCountdown"></div>
-    </div>
+  <section class="fade">
+    <div class="sec-label">Who we are</div>
+    <h2>A community that shares what school doesn't</h2>
+    <p class="body-text">HITSZCS is an open, student-run collection of resources for computer science students at Harbin Institute of Technology, Shenzhen. Course by course, we gather what we'd want handed to us before the semester started: organized notes, homeworks, tips, past exams and the lessons that usually only surface by luck. Knowledge is out there — it just shouldn't take a scavenger hunt to find it.</p>
   </section>
 
   <section class="fade">
-    <div class="sec-label">The brief</div><h2>What you're building</h2>
-    <p class="body-text">A platform — desktop only — that does at least one of these well. You don't need all four. Pick what matters, do it properly. Helping CS students is the top priority; everything else is decoration.</p>
-    <ul class="feat-list">
-      <li><span class="idx">01</span><span class="txt"><strong>Find a study buddy</strong>Match by course, schedule, or just who's free tonight.</span></li>
-      <li><span class="idx">02</span><span class="txt"><strong>Ask a senior</strong>A way to get help from someone who already survived the course.</span></li>
-      <li><span class="idx">03</span><span class="txt"><strong>Share resources</strong>Notes, past papers, links to HITSZCS repos. Keep it simple.</span></li>
-      <li><span class="idx">04</span><span class="txt"><strong>Study together</strong>Rooms, timers, group chat — whatever makes "let's study" real.</span></li>
+    <div class="sec-label">What lives here</div>
+    <h2>Course by course, year by year</h2>
+    <ul class="list">
+      <li><span class="idx">01</span><span class="txt"><strong>Course guides</strong>Structured by year — Freshman to Junior and beyond — so you know what's ahead before the first lecture.</span></li>
+      <li><span class="idx">02</span><span class="txt"><strong>Materials that matter</strong>Homework references, lessons, tips, and textbook PDFs gathered from the whole community.</span></li>
+      <li><span class="idx">03</span><span class="txt"><strong>Handed-down insight</strong>Past exams and advice passed from one generation of students to the next, without the gatekeeping.</span></li>
+      <li><span class="idx">04</span><span class="txt"><strong>Your part</strong>Anyone can contribute. The guide only gets better when the students still in the seats add to it.</span></li>
     </ul>
   </section>
 
   <section class="fade">
-    <div class="sec-label">Timeline</div><h2>How the 71 hours go</h2>
-    <div class="tl">
-      <div class="tl-row"><span class="t">Thu 23:00</span><span class="d"><strong>Matching.</strong> Solo participants get paired into teams of two.</span></div>
-      <div class="tl-row"><span class="t">Fri 00:00</span><span class="d"><strong>Start.</strong> Portal opens. Meet your teammate, pick an idea, go.</span></div>
-      <div class="tl-row"><span class="t">Fri 12:00</span><span class="d">Optional check-in. Post a screenshot if you want. No pressure.</span></div>
-      <div class="tl-row"><span class="t">Sun 18:00</span><span class="d">Five hours left. Wrap up, test, screenshot your work.</span></div>
-      <div class="tl-row"><span class="t">Sun 23:00</span><span class="d"><strong>Done.</strong> Push your repo, submit the link. Judging starts.</span></div>
-    </div>
+    <div class="sec-label">Standing rules</div>
+    <h2>Things we won't bend</h2>
+    <ul class="rules">
+      <li><span><strong>Free, forever.</strong> Public and open-source, accessible to every student — always.</span></li>
+      <li><span><strong>Ethics over shortcuts.</strong> We respect intellectual property, and we stand against plagiarism in every form.</span></li>
+      <li><span><strong>Less asymmetry.</strong> Information shouldn't flow only through closed groups and lucky connections.</span></li>
+      <li><span><strong>Made by students.</strong> Built by the people taking the courses, for the people about to.</span></li>
+    </ul>
   </section>
 
   <section class="fade">
-    <div class="sec-label">Rules</div><h2>House rules</h2>
-    <ol class="rules">
-      <li><span><strong>Two per team.</strong> Exactly two — no solos, no trios. Coming alone? The pot pairs you up.</span></li>
-      <li><span><strong>Hack Hive members only.</strong> This is an in-house event. The access code is your proof of membership.</span></li>
-      <li><span><strong>Vibecoding counts.</strong> AI-assisted or hand-written, both are fine. Ship however you work — just understand every line you submit.</span></li>
-      <li><span><strong>Desktop only.</strong> Web or native, but it runs on a desktop. Mobile is out of scope; don't burn hours on it.</span></li>
-      <li><span><strong>Repo link + image.</strong> No live demo session — screenshots are your demo. And write real documentation: setup, architecture, decisions, all in README.md.</span></li>
-      <li><span><strong>Frontend and architecture carry weight.</strong> Judges look hard at how it looks and how it's structured. Sloppy folders cost points.</span></li>
-      <li><span><strong>CS students come first.</strong> If it doesn't actually help a CS student survive the semester, it misses the point.</span></li>
-      <li><span><strong>Judges' decisions are final.</strong> Criteria: does it work, is it usable, is it thoughtful. No appeals, no hard feelings.</span></li>
-    </ol>
+    <div class="sec-label">Find your way</div>
+    <h2>The surface has doors</h2>
+    <div class="doors">
+      <a class="door" href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">
+        <span><span class="d-title">Browse the guide</span><span class="d-sub">notes · past papers · textbooks · everything on GitHub</span></span>
+        <span class="d-arrow">→</span>
+      </a>
+      <a class="door" href="https://github.com/elalamiimed/HITSZCS/blob/main/Contribution.md" target="_blank" rel="noopener">
+        <span><span class="d-title">Contribute</span><span class="d-sub">add what you survived — hitszcscontribution@proton.me</span></span>
+        <span class="d-arrow">→</span>
+      </a>
+      <a class="door" href="study-buddy.html">
+        <span><span class="d-title">Study Buddy</span><span class="d-sub">our 71-hour hackathon — find a partner, build something real</span></span>
+        <span class="d-arrow">→</span>
+      </a>
+    </div>
   </section>
-
-  <div class="cta fade">
-    <p>Grab a friend, or don't — the pot will find you one. Either way, build something you'd actually use next semester.</p>
-    <a class="btn" href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS on GitHub</a>
-  </div>
 
   <footer>
     <a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">HITSZCS</a> · Harbin Institute of Technology, Shenzhen · <span id="yr"></span>
@@ -161,193 +108,13 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
   </footer>
 </div>
 
-<div class="toast" id="toast"></div>
-<div class="overlay" id="overlay">the walls are watching.<br/>close devtools to keep walking.</div>
-
 <script>
-var API = '/.netlify/functions/pot';
-var LOCAL_FALLBACK_CODE = 'HITSZ2025';
-var ME_KEY = 'studybuddy_me';
-var TOKEN_KEY = 'studybuddy_token';
-var LOCAL_POT = 'studybuddy_pot_local';
-var state = { pot: [], matched: null, matchAt: null, mode: 'remote', ok: false };
-
-function showToast(msg, isError){
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (isError ? ' error' : '');
-  setTimeout(function(){ t.className = 'toast'; }, 2400);
-}
-
-function localPot(){ try{return JSON.parse(localStorage.getItem(LOCAL_POT)) || []}catch(e){return []} }
-function localSave(p){ localStorage.setItem(LOCAL_POT, JSON.stringify(p)); }
-function localMatchAt(){
-  var sz = new Date(Date.now() + 8*3600e3); var day = sz.getUTCDay(); var diff = (5 - day + 7) % 7;
-  if(diff === 0) diff = 7;
-  return Date.UTC(sz.getUTCFullYear(), sz.getUTCMonth(), sz.getUTCDate() + diff, 0,0,0) - 8*3600e3 - 3600e3;
-}
-function seededShuffle(arr, seed){
-  var a = arr.slice(), t = seed >>> 0;
-  function rnd(){ t += 0x6D2B79F5; var r = Math.imul(t ^ (t >>> 15), 1 | t); r ^= r + Math.imul(r ^ (r >>> 7), 61 | r); return ((r ^ (r >>> 14)) >>> 0) / 4294967296; }
-  for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(rnd() * (i + 1)); var tmp = a[i]; a[i] = a[j]; a[j] = tmp; }
-  return a;
-}
-function localMatched(names){
-  if(Date.now() < localMatchAt()) return null;
-  var s = seededShuffle(names, 20250401), m = {};
-  for(var i = 0; i + 1 < s.length; i += 2){ m[s[i]] = s[i+1]; m[s[i+1]] = s[i]; }
-  if(s.length % 2) m[s[s.length-1]] = null;
-  return m;
-}
-
-function sync(){
-  return fetch(API, {cache:'no-store'})
-    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
-    .then(function(j){
-      state.ok = true; state.mode = 'remote';
-      state.pot = j.pot || []; state.matched = j.matched || null; state.matchAt = j.matchAt || null;
-    })
-    .catch(function(){
-      if(state.ok){
-        // transient network/5xx blip: keep the last good server snapshot so
-        // the pot doesn't vanish and reappear on every failed poll.
-        state.mode = 'remote';
-      } else {
-        state.mode = 'local'; var names = localPot().map(function(p){ return p.name; });
-        state.pot = names; state.matched = localMatched(names); state.matchAt = localMatchAt();
-      }
-    })
-    .then(function(){ renderPot(); renderMatch(); });
-}
-
-function joinPot(){
-  var nameEl = document.getElementById('nameInput');
-  var codeEl = document.getElementById('codeInput');
-  var name = nameEl.value.trim(); var code = codeEl.value.trim();
-  nameEl.classList.remove('input-error'); codeEl.classList.remove('input-error');
-  if(!name){ showToast('write your name first', true); nameEl.classList.add('input-error'); return; }
-  if(!code){ showToast('you need the access code', true); codeEl.classList.add('input-error'); return; }
-
-  fetch(API, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({name:name, code:code}) })
-  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, status:r.status, j:j}; }); })
-  .then(function(res){
-    if(!res.ok){
-      var msg = (res.j && res.j.error) ? res.j.error : ('server ' + res.status);
-      showToast(msg, true);
-      if(res.status === 403 && /^wrong code/.test(msg)){ codeEl.classList.add('input-error'); }
-      return;
-    }
-    localStorage.setItem(TOKEN_KEY, res.j.token); localStorage.setItem(ME_KEY, name);
-    nameEl.value = ''; codeEl.value = ''; showToast('you\'re in. see you thursday 23:00.'); sync();
-  })
-  .catch(function(){
-    if(Date.now() >= localMatchAt()){ showToast('too late — teams are locked', true); return; }
-    if(code !== LOCAL_FALLBACK_CODE){ showToast('wrong code. you\'re not supposed to be here.', true); codeEl.classList.add('input-error'); return; }
-    var p = localPot();
-    for(var i = 0; i < p.length; i++){ if(p[i].name === name){ showToast('you\'re already in the pot', true); return; } }
-    var token = 'local-' + Math.random().toString(36).slice(2);
-    p.push({name:name, token:token}); localSave(p);
-    localStorage.setItem(TOKEN_KEY, token); localStorage.setItem(ME_KEY, name);
-    nameEl.value = ''; codeEl.value = ''; state.mode = 'local';
-    showToast('you\'re in (local mode — not synced).'); sync();
-  });
-}
-
-var withdrawTimer = null;
-function withdrawApp(){
-  var btn = document.getElementById('withdrawBtn');
-  if(state.matchAt && Date.now() >= state.matchAt){ showToast('too late — teams are locked', true); return; }
-  if(!btn.classList.contains('arm')){
-    btn.classList.add('arm'); btn.textContent = 'confirm withdraw?';
-    withdrawTimer = setTimeout(function(){ btn.classList.remove('arm'); btn.textContent = 'withdraw application'; }, 3000); return;
-  }
-  clearTimeout(withdrawTimer); var token = localStorage.getItem(TOKEN_KEY);
-  function resetBtn(){
-    btn.classList.remove('arm'); btn.textContent = 'withdraw application';
-  }
-  function cleanup(){
-    localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(ME_KEY);
-    resetBtn(); showToast('application withdrawn.'); sync();
-  }
-  fetch(API, { method:'DELETE', headers:{'content-type':'application/json'}, body: JSON.stringify({token:token}) })
-  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); })
-  .then(function(res){
-    if(!res.ok){ resetBtn(); showToast((res.j && res.j.error) || ('server ' + res.status), true); return; }
-    cleanup();
-  })
-  .catch(function(){ localSave(localPot().filter(function(p){ return p.token !== token; })); cleanup(); });
-}
-
-document.getElementById('nameInput').addEventListener('keydown', function(e){ if(e.key === 'Enter') document.getElementById('codeInput').focus(); });
-document.getElementById('codeInput').addEventListener('keydown', function(e){ if(e.key === 'Enter') joinPot(); });
-
-function renderPot(){
-  var pot = state.pot; var list = document.getElementById('potList'); var names = document.getElementById('potNames');
-  var count = document.getElementById('potCount'); var row = document.getElementById('withdrawRow');
-  if(pot.length === 0){ list.style.display = 'none'; return; }
-  list.style.display = 'block'; names.innerHTML = '';
-  pot.forEach(function(n){ var li = document.createElement('li'); li.textContent = n; names.appendChild(li); });
-  var teams = Math.floor(pot.length / 2); var leftover = pot.length % 2;
-  count.textContent = pot.length + ' in the pot · ' + teams + ' team' + (teams !== 1 ? 's' : '') + ' formed' + (leftover ? ' · 1 waiting' : '');
-  if(state.mode === 'local') count.textContent += ' · local mode — not synced';
-  var me = localStorage.getItem(ME_KEY);
-  if(me && pot.indexOf(me) !== -1){ row.style.display = 'flex'; document.getElementById('meName').textContent = me; }
-  else{ row.style.display = 'none'; }
-}
-
-function renderMatch(){
-  var info = document.getElementById('matchInfo'); var partner = document.getElementById('partnerName'); var cdEl = document.getElementById('matchCountdown');
-  if(state.pot.length === 0){ info.style.display = 'none'; return; }
-  info.style.display = 'block';
-  if(state.matched){
-    var me = localStorage.getItem(ME_KEY);
-    if(me && state.matched[me] !== undefined){
-      partner.textContent = state.matched[me] || '(no partner — odd number, check back)';
-      cdEl.textContent = 'go find them. you have 71 hours.';
-    } else { partner.textContent = '(teams are locked)'; cdEl.textContent = Math.floor(state.pot.length / 2) + ' teams formed.'; }
-    return;
-  }
-  var ms = Math.max(0, (state.matchAt || 0) - Date.now());
-  var h = Math.floor(ms / 3600000); var m = Math.floor(ms % 3600000 / 60000); var s = Math.floor(ms % 60000 / 1000);
-  cdEl.textContent = 'matching in ' + h + 'h ' + m + 'm ' + s + 's'; partner.textContent = '(waiting)';
-}
-
-sync(); setInterval(sync, 5000);
-
 (function(){
   var els = document.querySelectorAll('.fade');
   var io = new IntersectionObserver(function(e){ e.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); },{threshold:.12});
   els.forEach(function(el){ io.observe(el); });
 })();
 document.getElementById('yr').textContent = new Date().getFullYear();
-</script>
-
-<script>
-(function(){
-  var H=document.getElementById('ch'), M=document.getElementById('cm'), S=document.getElementById('cs');
-  if(!H||!M||!S)return;
-  function szNow(){ try{ return new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Shanghai'})); }catch(e){ return new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000); } }
-  function msToDeadline(){
-    var sz=szNow(); var d=new Date(sz.getTime()); var diff=(0-d.getDay()+7)%7;
-    if(diff===0&&d.getHours()>=23)diff=7; d.setDate(d.getDate()+diff); d.setHours(23,0,0,0); return d.getTime()-sz.getTime();
-  }
-  var end=Date.now()+msToDeadline();
-  function pad(n){return(n<10?'0':'')+n}
-  function tick(){ var t=Math.max(0,Math.floor((end-Date.now())/1000)); H.textContent=pad(Math.floor(t/3600)); M.textContent=pad(Math.floor((t%3600)/60)); S.textContent=pad(t%60); }
-  tick(); setInterval(tick,1000);
-})();
-</script>
-
-<script>
-document.addEventListener('contextmenu',function(e){e.preventDefault()});
-document.addEventListener('dragstart',function(e){e.preventDefault()});
-document.addEventListener('keydown',function(e){
-  var k=e.key;
-  if(k==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C','i','j','c'].indexOf(k)!==-1)||(e.ctrlKey&&['u','U','s','S','p','P'].indexOf(k)!==-1)){e.preventDefault();}
-});
-if(window.matchMedia&&matchMedia('(pointer:fine)').matches){
-  setInterval(function(){ var open=(window.outerWidth-window.innerWidth>170)||(window.outerHeight-window.innerHeight>170); document.getElementById('overlay').classList.toggle('on',open); },600);
-}
 </script>
 </body>
 </html>

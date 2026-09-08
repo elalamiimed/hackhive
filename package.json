@@ -1,9 +1,0 @@
-{
-  "name": "study-buddy-hackathon",
-  "version": "1.0.0",
-  "private": true,
-  "description": "HITSZCS hackathon portal with a shared pot and pairing function.",
-  "dependencies": {
-    "@netlify/blobs": "^8.1.0"
-  }
-}
