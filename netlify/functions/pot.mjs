@@ -11,9 +11,7 @@ import { getStore } from "@netlify/blobs";
 var ACCESS_CODE = "HITSZ2025";
 var SEED = 20250401;
 var PREFIX = "m:";
-// explicit strong consistency: a registration must be visible to the next
-// read immediately, otherwise list() can lag behind set() for up to 60s.
-var store = getStore({ name: "hackhive-pot", consistency: "strong" });
+var store = getStore({ name: "hackhive-pot" });
 
 function matchAtMs() {
   var sz = new Date(Date.now() + 8 * 3600 * 1000);
