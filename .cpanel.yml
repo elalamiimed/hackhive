@@ -3,6 +3,8 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/hitsfmec/public_html/
     - /bin/cp index.html $DEPLOYPATH
-    - /bin/cp hackathon-01.html $DEPLOYPATH
+    - /bin/rm -f $DEPLOYPATH/hackathon-01.html
+    - /bin/mkdir -p $DEPLOYPATH/hackhive
+    - /bin/cp hackhive/index.html $DEPLOYPATH/hackhive/index.html
     - /bin/cp maze.html $DEPLOYPATH
     - /bin/cp pot.php $DEPLOYPATH

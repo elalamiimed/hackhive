@@ -11,8 +11,11 @@ html{font-size:16px;scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
 body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
 .page{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 24px}
-.topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--dim);letter-spacing:.02em}
+.topbar{padding:40px 0 0;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--dim);letter-spacing:.02em}
 .topbar a{color:var(--dim);text-decoration:none}.topbar a:hover{color:var(--white)}
+.topbar .nav{display:flex;gap:18px;align-items:baseline}
+.topbar a.cta{color:#d4d4d4;border:1px solid #3a3a3a;padding:6px 14px;font-size:12px;letter-spacing:.06em;transition:border-color .2s,color .2s,background .2s;background:#0a0a0a}
+.topbar a.cta:hover{color:#fff;border-color:#999;background:#111}
 .hero{padding:120px 0 72px}
 .hero h1{font-size:clamp(2.6rem,7vw,4rem);font-weight:400;letter-spacing:-.03em;line-height:1.12;color:#e8e8e8}
 .hero h1 em{font-style:normal;color:var(--dim);display:block;margin-top:18px;font-size:clamp(1.1rem,2.6vw,1.4rem);letter-spacing:.01em}
@@ -48,7 +51,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
 </head>
 <body>
 <div class="page">
-  <div class="topbar"><span>HITSZCS</span><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">GitHub ↗</a></div>
+  <div class="topbar"><span>HITSZCS</span><span class="nav"><a href="https://github.com/elalamiimed/HITSZCS" target="_blank" rel="noopener">GitHub ↗</a><a class="cta" href="hackhive/">Hack Hive Hackathon 01</a></span></div>
 
   <div class="hero fade">
     <h1>HITSZCS.<em>by CS students, to CS students.</em></h1>
@@ -95,7 +98,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:var(--white)
         <span><span class="d-title">Contribute</span><span class="d-sub">add what you survived — hitszcscontribution@proton.me</span></span>
         <span class="d-arrow">→</span>
       </a>
-      <a class="door" href="hackathon-01.html">
+      <a class="door" href="hackhive/">
         <span><span class="d-title">Hack Hive Hackathon 01</span><span class="d-sub">our 71-hour build weekend — the Study Buddy challenge</span></span>
         <span class="d-arrow">→</span>
       </a>
